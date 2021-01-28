@@ -8,33 +8,48 @@
             <nuxt-link
               exact
               no-prefetch
+              to="/"
               active-class="active"
               class="nav-link"
-              to="/"
             >Home</nuxt-link>
           </li>
           <li class="nav-item">
             <nuxt-link
               no-prefetch
+              to="/about"
               active-class="active"
               class="nav-link"
-              to="/about"
             >About</nuxt-link>
           </li>
           <li class="nav-item">
             <nuxt-link
               no-prefetch
+              to="/users"
               active-class="active"
               class="nav-link"
-              to="/users"
             >Users</nuxt-link>
           </li>
-          <li class="nav-item">
-            <nuxt-link
+          <li
+            v-if="hasToken"
+            class="nav-item"
+          >
+            <a
               no-prefetch
+              href="#"
               active-class="active"
               class="nav-link"
+              @click.prevent="logout"
+            >Logout</a>
+          </li>
+          <li
+            v-if="!hasToken"
+            class="nav-item"
+          >
+            <nuxt-link
+              no-prefetch
               to="/login"
+              active-class="active"
+              class="nav-link"
             >Login</nuxt-link>
           </li>
         </ul>
@@ -45,7 +60,18 @@
 
 <script>
 export default {
-  name: 'NavBar'
+  name: 'NavBar',
+  computed: {
+    hasToken () {
+      return this.$store.getters['hasToken']
+    }
+  },
+  methods: {
+    logout () {
+      this.$store.dispatch('logout')
+      this.$router.push('/login')
+    }
+  }
 }
 </script>
 
